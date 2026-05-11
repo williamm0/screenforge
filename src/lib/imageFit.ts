@@ -41,7 +41,7 @@ export const applyImageTransform = (
   targetHeight: number,
   transform: ImageTransform,
 ): DrawRect => {
-  const safeScale = Math.max(0.2, transform.scale);
+  const safeScale = Math.max(0.05, transform.scale);
   const width = rect.width * safeScale;
   const height = rect.height * safeScale;
 

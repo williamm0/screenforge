@@ -2,7 +2,7 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 import { Center, useGLTF } from '@react-three/drei';
 import { useFrame } from '@react-three/fiber';
 import * as THREE from 'three';
-import { DeviceConfig, SCREEN_MESH_NAME_PATTERN } from '../config/devices';
+import { DeviceConfig } from '../config/devices';
 import { publicAssetUrl } from '../lib/assets';
 import { ImageFitMode } from '../lib/imageFit';
 import { createScreenTexture } from '../lib/screenTexture';
@@ -30,25 +30,6 @@ type LoadedModelProps = DeviceModelProps & {
   source: THREE.Object3D;
 };
 
-const isScreenCandidate = (object: THREE.Object3D, material?: THREE.Material | THREE.Material[]) => {
-  const materialNames = Array.isArray(material)
-    ? material.map((item) => item.name).join(' ')
-    : material?.name ?? '';
-
-  return SCREEN_MESH_NAME_PATTERN.test(`${object.name} ${materialNames}`);
-};
-
-const makeScreenMaterial = (texture: THREE.Texture, brightness: number) =>
-  new THREE.MeshStandardMaterial({
-    map: texture,
-    emissive: new THREE.Color('#ffffff'),
-    emissiveMap: texture,
-    emissiveIntensity: brightness,
-    metalness: 0,
-    roughness: 0.28,
-    toneMapped: false,
-  });
-
 const createRoundedScreenGeometry = (width: number, height: number, radius: number) => {
   const x = -width / 2;
   const y = -height / 2;
@@ -73,7 +54,6 @@ const LoadedModel = ({
   source,
   autoRotate,
   imageFit,
-  screenBrightness,
   imageScale,
   imageOffsetX,
   imageOffsetY,
@@ -122,19 +102,13 @@ const LoadedModel = ({
     };
   }, [fallbackScreenRatio, imageFit, imageOffsetX, imageOffsetY, imageRotation, imageScale, imageUrl]);
 
-  const { model, hasScreenMesh, fitScale } = useMemo(() => {
+  const { model, fitScale } = useMemo(() => {
     const clone = source.clone(true);
-    let screenFound = false;
 
     clone.traverse((object) => {
       if (object instanceof THREE.Mesh) {
         object.castShadow = true;
         object.receiveShadow = true;
-
-        if (texture && isScreenCandidate(object, object.material)) {
-          object.material = makeScreenMaterial(texture, screenBrightness);
-          screenFound = true;
-        }
       }
     });
 
@@ -144,8 +118,8 @@ const LoadedModel = ({
     const maxDimension = Math.max(size.x, size.y, size.z) || 1;
     const targetSize = device.id.includes('macbook') ? 3.2 : 2.95;
 
-    return { model: clone, hasScreenMesh: screenFound, fitScale: targetSize / maxDimension };
-  }, [device.id, screenBrightness, source, texture]);
+    return { model: clone, fitScale: targetSize / maxDimension };
+  }, [device.id, source]);
 
   const fallbackGeometry = useMemo(() => {
     const [width, height] = device.fallbackScreen.size;
@@ -198,7 +172,9 @@ const LoadedModel = ({
                 toneMapped={false}
                 side={THREE.DoubleSide}
                 transparent
-                opacity={hasScreenMesh ? 0.98 : 1}
+                opacity={1}
+                depthTest={false}
+                depthWrite={false}
               />
             </mesh>
           ) : null}
@@ -209,7 +185,7 @@ const LoadedModel = ({
               rotation={device.fallbackScreen.rotation}
               renderOrder={8}
             >
-              <meshBasicMaterial color="#050505" toneMapped={false} side={THREE.DoubleSide} />
+              <meshBasicMaterial color="#050505" toneMapped={false} side={THREE.DoubleSide} depthTest={false} depthWrite={false} />
             </mesh>
           ) : null}
         </group>

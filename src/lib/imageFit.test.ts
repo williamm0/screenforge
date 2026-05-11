@@ -30,4 +30,15 @@ describe('computeImageFitRect', () => {
       height: 1500,
     });
   });
+
+  it('allows very small image scale for precise placement', () => {
+    const rect = computeImageFitRect(1000, 1000, 1000, 1000, 'cover');
+
+    expect(applyImageTransform(rect, 1000, 1000, { scale: 0.05, offsetX: 0, offsetY: 0, rotation: 0 })).toEqual({
+      x: 475,
+      y: 475,
+      width: 50,
+      height: 50,
+    });
+  });
 });

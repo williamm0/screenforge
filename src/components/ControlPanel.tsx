@@ -170,6 +170,56 @@ export const ControlPanel = ({
       <Range label="Softness" min={1} max={12} step={0.5} value={settings.shadowSoftness} onChange={(value) => onSettingsChange(updateSetting(settings, 'shadowSoftness', value))} />
       <Range label="Camera zoom" min={0.7} max={1.45} step={0.05} value={settings.zoom} onChange={(value) => onSettingsChange(updateSetting(settings, 'zoom', value))} />
       <Range label="Screen glow" min={0} max={0.6} step={0.02} value={settings.screenBrightness} onChange={(value) => onSettingsChange(updateSetting(settings, 'screenBrightness', value))} />
+      <div className="color-preset-row">
+        <button
+          type="button"
+          onClick={() =>
+            onSettingsChange({
+              ...settings,
+              background: 'gradient',
+              gradientStart: '#fbfbfd',
+              gradientMid: '#edf2f8',
+              gradientEnd: '#cfdced',
+              keyLightColor: '#ffffff',
+              fillLightColor: '#b8d8ff',
+            })
+          }
+        >
+          Pearl
+        </button>
+        <button
+          type="button"
+          onClick={() =>
+            onSettingsChange({
+              ...settings,
+              background: 'gradient',
+              gradientStart: '#fff7ef',
+              gradientMid: '#f2d8c2',
+              gradientEnd: '#d6b192',
+              keyLightColor: '#fff1df',
+              fillLightColor: '#ffd0a3',
+            })
+          }
+        >
+          Dawn
+        </button>
+        <button
+          type="button"
+          onClick={() =>
+            onSettingsChange({
+              ...settings,
+              background: 'gradient',
+              gradientStart: '#f7fbff',
+              gradientMid: '#d9f3ee',
+              gradientEnd: '#bdd5ff',
+              keyLightColor: '#e9fbff',
+              fillLightColor: '#b7ffe8',
+            })
+          }
+        >
+          Aurora
+        </button>
+      </div>
     </div>
 
     <div className="panel-section">
@@ -190,7 +240,7 @@ export const ControlPanel = ({
           Contain
         </button>
       </div>
-      <Range label="Image size" min={0.5} max={2.5} step={0.05} value={settings.imageScale} onChange={(value) => onSettingsChange(updateSetting(settings, 'imageScale', value))} />
+      <Range label="Image size" min={0.05} max={2.5} step={0.01} value={settings.imageScale} onChange={(value) => onSettingsChange(updateSetting(settings, 'imageScale', value))} />
       <Range label="Move X" min={-0.8} max={0.8} step={0.01} value={settings.imageOffsetX} onChange={(value) => onSettingsChange(updateSetting(settings, 'imageOffsetX', value))} />
       <Range label="Move Y" min={-0.8} max={0.8} step={0.01} value={settings.imageOffsetY} onChange={(value) => onSettingsChange(updateSetting(settings, 'imageOffsetY', value))} />
       <Range label="Rotate" min={-3.14} max={3.14} step={0.02} value={settings.imageRotation} onChange={(value) => onSettingsChange(updateSetting(settings, 'imageRotation', value))} />
