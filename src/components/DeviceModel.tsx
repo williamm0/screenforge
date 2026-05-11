@@ -1,8 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { Center, useGLTF } from '@react-three/drei';
-import { useFrame, useLoader } from '@react-three/fiber';
+import { useFrame } from '@react-three/fiber';
 import * as THREE from 'three';
-import { USDZLoader } from 'three/examples/jsm/loaders/USDZLoader.js';
 import { DeviceConfig, SCREEN_MESH_NAME_PATTERN } from '../config/devices';
 import { publicAssetUrl } from '../lib/assets';
 import { ImageFitMode } from '../lib/imageFit';
@@ -14,6 +13,16 @@ type DeviceModelProps = {
   autoRotate: boolean;
   imageFit: ImageFitMode;
   screenBrightness: number;
+  imageScale: number;
+  imageOffsetX: number;
+  imageOffsetY: number;
+  modelX: number;
+  modelY: number;
+  modelZ: number;
+  modelRotationX: number;
+  modelRotationY: number;
+  modelRotationZ: number;
+  modelScale: number;
 };
 
 type LoadedModelProps = DeviceModelProps & {
@@ -57,7 +66,24 @@ const createRoundedScreenGeometry = (width: number, height: number, radius: numb
   return new THREE.ShapeGeometry(shape, 18);
 };
 
-const LoadedModel = ({ device, imageUrl, source, autoRotate, imageFit, screenBrightness }: LoadedModelProps) => {
+const LoadedModel = ({
+  device,
+  imageUrl,
+  source,
+  autoRotate,
+  imageFit,
+  screenBrightness,
+  imageScale,
+  imageOffsetX,
+  imageOffsetY,
+  modelX,
+  modelY,
+  modelZ,
+  modelRotationX,
+  modelRotationY,
+  modelRotationZ,
+  modelScale,
+}: LoadedModelProps) => {
   const [texture, setTexture] = useState<THREE.CanvasTexture | null>(null);
   const groupRef = useRef<THREE.Group>(null);
   const fallbackScreenRatio = device.fallbackScreen.size[0] / device.fallbackScreen.size[1];
@@ -70,7 +96,11 @@ const LoadedModel = ({ device, imageUrl, source, autoRotate, imageFit, screenBri
       return;
     }
 
-    createScreenTexture(imageUrl, fallbackScreenRatio, imageFit)
+    createScreenTexture(imageUrl, fallbackScreenRatio, imageFit, {
+      scale: imageScale,
+      offsetX: imageOffsetX,
+      offsetY: imageOffsetY,
+    })
       .then((nextTexture) => {
         if (active) {
           setTexture(nextTexture);
@@ -87,7 +117,7 @@ const LoadedModel = ({ device, imageUrl, source, autoRotate, imageFit, screenBri
     return () => {
       active = false;
     };
-  }, [fallbackScreenRatio, imageFit, imageUrl]);
+  }, [fallbackScreenRatio, imageFit, imageOffsetX, imageOffsetY, imageScale, imageUrl]);
 
   const { model, hasScreenMesh, fitScale } = useMemo(() => {
     const clone = source.clone(true);
@@ -101,6 +131,13 @@ const LoadedModel = ({ device, imageUrl, source, autoRotate, imageFit, screenBri
         if (texture && isScreenCandidate(object, object.material)) {
           object.material = makeScreenMaterial(texture, screenBrightness);
           screenFound = true;
+        } else if (device.materialTint && !isScreenCandidate(object, object.material)) {
+          const existing = Array.isArray(object.material) ? object.material[0] : object.material;
+          if (existing instanceof THREE.MeshStandardMaterial || existing instanceof THREE.MeshPhysicalMaterial) {
+            const tinted = existing.clone();
+            tinted.color.lerp(new THREE.Color(device.materialTint), 0.42);
+            object.material = tinted;
+          }
         }
       }
     });
@@ -112,7 +149,7 @@ const LoadedModel = ({ device, imageUrl, source, autoRotate, imageFit, screenBri
     const targetSize = device.id.includes('macbook') ? 3.2 : 2.95;
 
     return { model: clone, hasScreenMesh: screenFound, fitScale: targetSize / maxDimension };
-  }, [device.id, screenBrightness, source, texture]);
+  }, [device.id, device.materialTint, screenBrightness, source, texture]);
 
   const fallbackGeometry = useMemo(() => {
     const [width, height] = device.fallbackScreen.size;
@@ -128,18 +165,33 @@ const LoadedModel = ({ device, imageUrl, source, autoRotate, imageFit, screenBri
   });
 
   return (
-    <group ref={groupRef} rotation={device.initialRotation} scale={device.scale}>
+    <group
+      ref={groupRef}
+      position={[modelX, modelY, modelZ]}
+      rotation={[
+        device.initialRotation[0] + modelRotationX,
+        device.initialRotation[1] + modelRotationY,
+        device.initialRotation[2] + modelRotationZ,
+      ]}
+      scale={device.scale * modelScale}
+    >
       <Center>
         <group scale={fitScale}>
           <primitive object={model} />
-          {texture && !hasScreenMesh ? (
+          {texture ? (
             <mesh
               geometry={fallbackGeometry}
               position={device.fallbackScreen.position}
               rotation={device.fallbackScreen.rotation}
               renderOrder={5}
             >
-              <meshBasicMaterial map={texture} toneMapped={false} side={THREE.DoubleSide} />
+              <meshBasicMaterial
+                map={texture}
+                toneMapped={false}
+                side={THREE.DoubleSide}
+                transparent
+                opacity={hasScreenMesh ? 0.98 : 1}
+              />
             </mesh>
           ) : null}
         </group>
@@ -148,22 +200,8 @@ const LoadedModel = ({ device, imageUrl, source, autoRotate, imageFit, screenBri
   );
 };
 
-const GlbDevice = (props: DeviceModelProps) => {
+export const DeviceModel = (props: DeviceModelProps) => {
   const gltf = useGLTF(publicAssetUrl(props.device.modelPath)) as unknown as { scene: THREE.Object3D };
 
   return <LoadedModel {...props} source={gltf.scene} />;
-};
-
-const UsdzDevice = (props: DeviceModelProps) => {
-  const group = useLoader(USDZLoader, publicAssetUrl(props.device.modelPath));
-
-  return <LoadedModel {...props} source={group} />;
-};
-
-export const DeviceModel = (props: DeviceModelProps) => {
-  if (props.device.modelPath.endsWith('.usdz')) {
-    return <UsdzDevice {...props} />;
-  }
-
-  return <GlbDevice {...props} />;
 };

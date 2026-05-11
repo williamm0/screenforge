@@ -138,7 +138,7 @@ button {
 
 .tool-grid {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) 360px;
+  grid-template-columns: minmax(0, 1fr) 390px;
   gap: 24px;
   align-items: stretch;
 }
@@ -237,6 +237,16 @@ button {
   border: 1px solid rgba(0, 0, 0, 0.08);
 }
 
+.control-panel::-webkit-scrollbar {
+  width: 10px;
+}
+
+.control-panel::-webkit-scrollbar-thumb {
+  background: #d2d2d7;
+  border: 3px solid #ffffff;
+  border-radius: 9999px;
+}
+
 .panel-section + .panel-section,
 .panel-actions {
   margin-top: 26px;
@@ -261,6 +271,28 @@ select {
   background: #fafafc;
   border: 1px solid #e0e0e0;
   border-radius: 11px;
+}
+
+.preset-row {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.preset-row button,
+.wide-utility-button {
+  min-height: 36px;
+  color: #333333;
+  background: #fafafc;
+  border: 1px solid #e0e0e0;
+  border-radius: 9999px;
+  cursor: pointer;
+}
+
+.wide-utility-button {
+  width: 100%;
+  margin-top: 14px;
 }
 
 .background-grid {
@@ -324,7 +356,7 @@ select {
 }
 
 .range-row {
-  grid-template-columns: 96px minmax(0, 1fr) 42px;
+  grid-template-columns: 92px minmax(0, 1fr) 46px;
   margin-top: 14px;
 }
 

@@ -1,7 +1,12 @@
 import * as THREE from 'three';
-import { computeImageFitRect, ImageFitMode } from './imageFit';
+import { applyImageTransform, computeImageFitRect, ImageFitMode, ImageTransform } from './imageFit';
 
-export const createScreenTexture = (imageUrl: string, targetRatio = 1, fit: ImageFitMode = 'cover') =>
+export const createScreenTexture = (
+  imageUrl: string,
+  targetRatio = 1,
+  fit: ImageFitMode = 'cover',
+  transform: ImageTransform = { scale: 1, offsetX: 0, offsetY: 0 },
+) =>
   new Promise<THREE.CanvasTexture>((resolve, reject) => {
     const image = new Image();
     image.onload = () => {
@@ -18,7 +23,12 @@ export const createScreenTexture = (imageUrl: string, targetRatio = 1, fit: Imag
       canvas.width = width;
       canvas.height = height;
 
-      const rect = computeImageFitRect(image.width, image.height, width, height, fit);
+      const rect = applyImageTransform(
+        computeImageFitRect(image.width, image.height, width, height, fit),
+        width,
+        height,
+        transform,
+      );
 
       context.fillStyle = '#050505';
       context.fillRect(0, 0, width, height);

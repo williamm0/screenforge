@@ -21,6 +21,16 @@ type SceneSettings = {
   autoRotate: boolean;
   imageFit: ImageFitMode;
   screenBrightness: number;
+  imageScale: number;
+  imageOffsetX: number;
+  imageOffsetY: number;
+  modelX: number;
+  modelY: number;
+  modelZ: number;
+  modelRotationX: number;
+  modelRotationY: number;
+  modelRotationZ: number;
+  modelScale: number;
 };
 
 type DeviceSceneProps = {
@@ -135,6 +145,16 @@ export const DeviceScene = ({ device, imageUrl, settings, resetToken, onCanvasRe
         autoRotate={settings.autoRotate}
         imageFit={settings.imageFit}
         screenBrightness={settings.screenBrightness}
+        imageScale={settings.imageScale}
+        imageOffsetX={settings.imageOffsetX}
+        imageOffsetY={settings.imageOffsetY}
+        modelX={settings.modelX}
+        modelY={settings.modelY}
+        modelZ={settings.modelZ}
+        modelRotationX={settings.modelRotationX}
+        modelRotationY={settings.modelRotationY}
+        modelRotationZ={settings.modelRotationZ}
+        modelScale={settings.modelScale}
       />
       <Environment preset="studio" environmentIntensity={0.38} />
     </Suspense>

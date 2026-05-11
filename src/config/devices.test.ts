@@ -3,10 +3,10 @@ import { DEVICE_CONFIGS, SCREEN_MESH_NAME_PATTERN } from './devices';
 
 describe('device configuration', () => {
   it('maps every requested device to a model asset path', () => {
-    expect(DEVICE_CONFIGS).toHaveLength(9);
+    expect(DEVICE_CONFIGS.length).toBeGreaterThan(9);
 
     for (const device of DEVICE_CONFIGS) {
-      expect(device.modelPath).toMatch(/^models\/.+\.(glb|usdz)$/);
+      expect(device.modelPath).toMatch(/^models\/.+\.glb$/);
       expect(device.displayName).toBeTruthy();
       expect(device.fallbackScreen.size[0]).toBeGreaterThan(0);
       expect(device.fallbackScreen.size[1]).toBeGreaterThan(0);

@@ -22,6 +22,16 @@ const DEFAULT_SETTINGS: AppSettings = {
   autoRotate: false,
   imageFit: 'cover',
   screenBrightness: 0.18,
+  imageScale: 1,
+  imageOffsetX: 0,
+  imageOffsetY: 0,
+  modelX: 0,
+  modelY: 0,
+  modelZ: 0,
+  modelRotationX: 0,
+  modelRotationY: 0,
+  modelRotationZ: 0,
+  modelScale: 1,
 };
 
 export const App = () => {

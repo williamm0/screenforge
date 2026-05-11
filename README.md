@@ -35,6 +35,8 @@ The app is fully static and does not need a backend service.
 
 - Drag-and-drop or file picker upload for PNG, JPG, and WebP.
 - Cover/contain screen fitting.
+- Screenshot crop controls for size, X offset, and Y offset.
+- Device position controls for scale, X/Y/Z movement, tilt, turn, and roll.
 - Background presets plus color picker.
 - Lighting, key-light, ambient, shadow, softness, zoom, auto-rotate, and screen glow controls.
 - Copy PNG to clipboard when the browser supports image clipboard writes.
@@ -48,27 +50,24 @@ Runtime models live in `public/models` and are loaded by the centralized registr
 Current mappings:
 
 - `/models/iphone-15-pro.glb`
-- `/models/iphone-16-plus-blue.usdz`
-- `/models/iphone-16-pro-max.glb`
-- `/models/iphone-16-pro-max-light-brown.usdz`
-- `/models/iphone-17-pro.glb`
-- `/models/iphone-air.usdz`
+- `/models/iphone-16-pro-max.glb` powers iPhone 16 Pro Max and color variants.
+- `/models/iphone-17-pro.glb` powers iPhone 17 Pro and lightweight color variants.
 - `/models/macbook-neo.glb`
 - `/models/macbook-pro-14-inch-m5.glb`
 - `/models/silver-apple-ipad-13-pro-m4.glb`
 
 ## Add Or Tune A Device
 
-1. Place the `.glb` or `.usdz` file in `public/models`.
+1. Place a `.glb` file in `public/models`.
 2. Add a new entry to `DEVICE_CONFIGS` in `src/config/devices.ts`.
 3. Tune `initialRotation`, `cameraDistance`, and `fallbackScreen`.
-4. Prefer model mesh or material names that include `screen`, `display`, `glass`, `monitor`, or `lcd`. Screenforge tries those first and only uses the fallback plane when it cannot find a usable screen mesh.
+4. Prefer model mesh or material names that include `screen`, `display`, `glass`, `monitor`, or `lcd`. Screenforge tries those first and also renders a tuned fallback screen plane so uploaded screenshots stay visible.
 5. Run `npm test`, `npm run lint`, and `npm run build`.
 
 ## Project Structure
 
 - `src/components/DeviceScene.tsx` controls the R3F canvas, camera, lighting, shadows, and backgrounds.
-- `src/components/DeviceModel.tsx` loads GLB/USDZ assets and applies the uploaded screenshot to screen meshes or fallback planes.
+- `src/components/DeviceModel.tsx` loads GLB assets and applies the uploaded screenshot to screen meshes plus tuned fallback planes.
 - `src/components/UploadDropzone.tsx` handles drag-and-drop and file picker input.
 - `src/components/ControlPanel.tsx` contains device, background, lighting, camera, and export controls.
 - `src/config/devices.ts` is the model registry and per-device fallback screen tuning.
