@@ -37,8 +37,12 @@ The app is fully static and does not need a backend service.
 - Cover/contain screen fitting.
 - Screenshot crop controls for size, X offset, and Y offset.
 - Device position controls for scale, X/Y/Z movement, tilt, turn, and roll.
+- Quick rotation buttons and OrbitControls for direct mouse/touch rotation.
 - Background presets plus color picker.
+- Custom three-stop gradient backgrounds.
+- Colored key and fill lights.
 - Lighting, key-light, ambient, shadow, softness, zoom, auto-rotate, and screen glow controls.
+- PNG download sizes from canvas size through 1080p, 1440p, 4K, 5K, and 8K.
 - Copy PNG to clipboard when the browser supports image clipboard writes.
 - Save picture to the local browser library.
 - Download saved pictures later from the local library.
@@ -50,11 +54,13 @@ Runtime models live in `public/models` and are loaded by the centralized registr
 Current mappings:
 
 - `/models/iphone-15-pro.glb`
-- `/models/iphone-16-pro-max.glb` powers iPhone 16 Pro Max and color variants.
-- `/models/iphone-17-pro.glb` powers iPhone 17 Pro and lightweight color variants.
+- `/models/iphone-16-pro-max.glb`
+- `/models/iphone-17-pro.glb`
 - `/models/macbook-neo.glb`
 - `/models/macbook-pro-14-inch-m5.glb`
 - `/models/silver-apple-ipad-13-pro-m4.glb`
+
+Unsupported USDZ assets and GLB color aliases were removed from the app because they either crashed Three.js or looked misleading.
 
 ## Add Or Tune A Device
 

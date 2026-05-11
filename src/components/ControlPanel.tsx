@@ -1,12 +1,15 @@
 import { Clipboard, Download, RotateCcw, Save } from 'lucide-react';
 import { BACKGROUNDS, BackgroundId } from '../config/backgrounds';
 import { DEVICE_CONFIGS, DeviceId } from '../config/devices';
+import { EXPORT_RESOLUTIONS, ExportResolution } from '../lib/exportSizes';
 import { ImageFitMode } from '../lib/imageFit';
 
 export type AppSettings = {
   background: BackgroundId;
   backgroundColor: string;
   lighting: number;
+  keyLightColor: string;
+  fillLightColor: string;
   ambient: number;
   keyX: number;
   keyY: number;
@@ -26,6 +29,10 @@ export type AppSettings = {
   modelRotationY: number;
   modelRotationZ: number;
   modelScale: number;
+  gradientStart: string;
+  gradientEnd: string;
+  gradientMid: string;
+  exportResolution: ExportResolution;
 };
 
 type ControlPanelProps = {
@@ -106,10 +113,54 @@ export const ControlPanel = ({
           onChange={(event) => onSettingsChange(updateSetting(settings, 'backgroundColor', event.target.value))}
         />
       </label>
+      <div className="gradient-controls">
+        <label>
+          <span>Gradient A</span>
+          <input
+            type="color"
+            value={settings.gradientStart}
+            onChange={(event) => onSettingsChange(updateSetting(settings, 'gradientStart', event.target.value))}
+          />
+        </label>
+        <label>
+          <span>Gradient B</span>
+          <input
+            type="color"
+            value={settings.gradientMid}
+            onChange={(event) => onSettingsChange(updateSetting(settings, 'gradientMid', event.target.value))}
+          />
+        </label>
+        <label>
+          <span>Gradient C</span>
+          <input
+            type="color"
+            value={settings.gradientEnd}
+            onChange={(event) => onSettingsChange(updateSetting(settings, 'gradientEnd', event.target.value))}
+          />
+        </label>
+      </div>
     </div>
 
     <div className="panel-section">
       <p className="eyebrow">Tune the scene</p>
+      <div className="gradient-controls">
+        <label>
+          <span>Key light</span>
+          <input
+            type="color"
+            value={settings.keyLightColor}
+            onChange={(event) => onSettingsChange(updateSetting(settings, 'keyLightColor', event.target.value))}
+          />
+        </label>
+        <label>
+          <span>Fill light</span>
+          <input
+            type="color"
+            value={settings.fillLightColor}
+            onChange={(event) => onSettingsChange(updateSetting(settings, 'fillLightColor', event.target.value))}
+          />
+        </label>
+      </div>
       <Range label="Lighting" min={0.2} max={4} step={0.1} value={settings.lighting} onChange={(value) => onSettingsChange(updateSetting(settings, 'lighting', value))} />
       <Range label="Ambient" min={0} max={2} step={0.05} value={settings.ambient} onChange={(value) => onSettingsChange(updateSetting(settings, 'ambient', value))} />
       <Range label="Key light X" min={-6} max={6} step={0.2} value={settings.keyX} onChange={(value) => onSettingsChange(updateSetting(settings, 'keyX', value))} />
@@ -159,6 +210,17 @@ export const ControlPanel = ({
       <Range label="Tilt X" min={-1.2} max={1.2} step={0.02} value={settings.modelRotationX} onChange={(value) => onSettingsChange(updateSetting(settings, 'modelRotationX', value))} />
       <Range label="Turn Y" min={-1.8} max={1.8} step={0.02} value={settings.modelRotationY} onChange={(value) => onSettingsChange(updateSetting(settings, 'modelRotationY', value))} />
       <Range label="Roll Z" min={-0.9} max={0.9} step={0.02} value={settings.modelRotationZ} onChange={(value) => onSettingsChange(updateSetting(settings, 'modelRotationZ', value))} />
+      <div className="rotate-buttons" aria-label="Quick rotation">
+        <button type="button" onClick={() => onSettingsChange({ ...settings, modelRotationY: settings.modelRotationY - 0.25 })}>
+          Left
+        </button>
+        <button type="button" onClick={() => onSettingsChange({ ...settings, modelRotationY: settings.modelRotationY + 0.25 })}>
+          Right
+        </button>
+        <button type="button" onClick={() => onSettingsChange({ ...settings, modelRotationZ: settings.modelRotationZ - 0.18 })}>
+          Roll
+        </button>
+      </div>
       <button
         className="wide-utility-button"
         type="button"
@@ -180,6 +242,19 @@ export const ControlPanel = ({
     </div>
 
     <div className="panel-actions">
+      <label className="select-row">
+        <span>Download size</span>
+        <select
+          value={settings.exportResolution}
+          onChange={(event) => onSettingsChange(updateSetting(settings, 'exportResolution', event.target.value as ExportResolution))}
+        >
+          {EXPORT_RESOLUTIONS.map((resolution) => (
+            <option key={resolution.id} value={resolution.id}>
+              {resolution.label}
+            </option>
+          ))}
+        </select>
+      </label>
       <label className="toggle-row">
         <input
           type="checkbox"

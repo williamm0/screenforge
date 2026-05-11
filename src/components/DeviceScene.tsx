@@ -1,6 +1,6 @@
 import { Suspense, useEffect, useMemo, useRef } from 'react';
 import type { ElementRef } from 'react';
-import { ContactShadows, Environment, OrbitControls, PerspectiveCamera } from '@react-three/drei';
+import { ContactShadows, Environment, Html, OrbitControls, PerspectiveCamera } from '@react-three/drei';
 import { Canvas, useThree } from '@react-three/fiber';
 import * as THREE from 'three';
 import { BackgroundId } from '../config/backgrounds';
@@ -12,6 +12,8 @@ type SceneSettings = {
   background: BackgroundId;
   backgroundColor: string;
   lighting: number;
+  keyLightColor: string;
+  fillLightColor: string;
   ambient: number;
   keyX: number;
   keyY: number;
@@ -31,6 +33,9 @@ type SceneSettings = {
   modelRotationY: number;
   modelRotationZ: number;
   modelScale: number;
+  gradientStart: string;
+  gradientEnd: string;
+  gradientMid: string;
 };
 
 type DeviceSceneProps = {
@@ -53,10 +58,10 @@ const getSceneBackground = (settings: SceneSettings) => {
 const StudioBackground = ({ settings }: { settings: SceneSettings }) => {
   const { scene } = useThree();
   const gradientTexture = useMemo(() => {
-    const texture = new THREE.CanvasTexture(makeGradientCanvas());
+    const texture = new THREE.CanvasTexture(makeGradientCanvas(settings.gradientStart, settings.gradientMid, settings.gradientEnd));
     texture.colorSpace = THREE.SRGBColorSpace;
     return texture;
-  }, []);
+  }, [settings.gradientEnd, settings.gradientMid, settings.gradientStart]);
 
   useEffect(() => {
     scene.background = getSceneBackground(settings);
@@ -74,7 +79,7 @@ const StudioBackground = ({ settings }: { settings: SceneSettings }) => {
   return null;
 };
 
-const makeGradientCanvas = () => {
+const makeGradientCanvas = (start: string, mid: string, end: string) => {
   const canvas = document.createElement('canvas');
   canvas.width = 16;
   canvas.height = 16;
@@ -82,9 +87,9 @@ const makeGradientCanvas = () => {
 
   if (context) {
     const gradient = context.createLinearGradient(0, 0, 16, 16);
-    gradient.addColorStop(0, '#ffffff');
-    gradient.addColorStop(0.55, '#f5f5f7');
-    gradient.addColorStop(1, '#dfe7f3');
+    gradient.addColorStop(0, start);
+    gradient.addColorStop(0.55, mid);
+    gradient.addColorStop(1, end);
     context.fillStyle = gradient;
     context.fillRect(0, 0, 16, 16);
   }
@@ -135,10 +140,20 @@ export const DeviceScene = ({ device, imageUrl, settings, resetToken, onCanvasRe
       castShadow
       position={[settings.keyX, settings.keyY, 4.5]}
       intensity={settings.lighting}
+      color={settings.keyLightColor}
       shadow-mapSize={[2048, 2048]}
       shadow-bias={-0.00008}
     />
-    <Suspense fallback={null}>
+    <pointLight position={[-3.5, 1.6, 3]} intensity={settings.lighting * 0.38} color={settings.fillLightColor} />
+    <Suspense
+      fallback={
+        <Html center>
+          <div className="scene-loader" aria-label="Loading 3D model">
+            <span />
+          </div>
+        </Html>
+      }
+    >
       <DeviceModel
         device={device}
         imageUrl={imageUrl}

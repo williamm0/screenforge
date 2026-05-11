@@ -3,7 +3,7 @@ import { DEVICE_CONFIGS, SCREEN_MESH_NAME_PATTERN } from './devices';
 
 describe('device configuration', () => {
   it('maps every requested device to a model asset path', () => {
-    expect(DEVICE_CONFIGS.length).toBeGreaterThan(9);
+    expect(DEVICE_CONFIGS).toHaveLength(6);
 
     for (const device of DEVICE_CONFIGS) {
       expect(device.modelPath).toMatch(/^models\/.+\.glb$/);
@@ -11,6 +11,12 @@ describe('device configuration', () => {
       expect(device.fallbackScreen.size[0]).toBeGreaterThan(0);
       expect(device.fallbackScreen.size[1]).toBeGreaterThan(0);
     }
+  });
+
+  it('only exposes unique real model files', () => {
+    const paths = DEVICE_CONFIGS.map((device) => device.modelPath);
+
+    expect(new Set(paths).size).toBe(paths.length);
   });
 
   it('recognizes common screen mesh and material names', () => {

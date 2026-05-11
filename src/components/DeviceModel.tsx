@@ -131,13 +131,6 @@ const LoadedModel = ({
         if (texture && isScreenCandidate(object, object.material)) {
           object.material = makeScreenMaterial(texture, screenBrightness);
           screenFound = true;
-        } else if (device.materialTint && !isScreenCandidate(object, object.material)) {
-          const existing = Array.isArray(object.material) ? object.material[0] : object.material;
-          if (existing instanceof THREE.MeshStandardMaterial || existing instanceof THREE.MeshPhysicalMaterial) {
-            const tinted = existing.clone();
-            tinted.color.lerp(new THREE.Color(device.materialTint), 0.42);
-            object.material = tinted;
-          }
         }
       }
     });
@@ -149,7 +142,7 @@ const LoadedModel = ({
     const targetSize = device.id.includes('macbook') ? 3.2 : 2.95;
 
     return { model: clone, hasScreenMesh: screenFound, fitScale: targetSize / maxDimension };
-  }, [device.id, device.materialTint, screenBrightness, source, texture]);
+  }, [device.id, screenBrightness, source, texture]);
 
   const fallbackGeometry = useMemo(() => {
     const [width, height] = device.fallbackScreen.size;

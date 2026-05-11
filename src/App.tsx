@@ -7,12 +7,15 @@ import { SavedGallery } from './components/SavedGallery';
 import { UploadDropzone } from './components/UploadDropzone';
 import { DeviceId, getDeviceConfig } from './config/devices';
 import { canvasToPngBlob, canvasToPngDataUrl, downloadDataUrl, exportCanvasAsPng } from './lib/exportCanvas';
+import { resolveExportDimensions } from './lib/exportSizes';
 import { createSavedMockup, deleteSavedMockup, getSavedMockups, SavedMockup, saveMockup, clearSavedMockups } from './lib/savedMockups';
 
 const DEFAULT_SETTINGS: AppSettings = {
   background: 'light',
   backgroundColor: '#f5f5f7',
   lighting: 2.1,
+  keyLightColor: '#ffffff',
+  fillLightColor: '#d8e9ff',
   ambient: 0.72,
   keyX: 2.4,
   keyY: 4.8,
@@ -32,6 +35,10 @@ const DEFAULT_SETTINGS: AppSettings = {
   modelRotationY: 0,
   modelRotationZ: 0,
   modelScale: 1,
+  gradientStart: '#ffffff',
+  gradientMid: '#f5f5f7',
+  gradientEnd: '#dfe7f3',
+  exportResolution: 'source',
 };
 
 export const App = () => {
@@ -62,7 +69,11 @@ export const App = () => {
 
   const handleExport = () => {
     if (canvas) {
-      exportCanvasAsPng(canvas);
+      exportCanvasAsPng(
+        canvas,
+        `screenforge-mockup-${settings.exportResolution}.png`,
+        resolveExportDimensions(settings.exportResolution, canvas.width, canvas.height),
+      );
     }
   };
 
@@ -124,6 +135,9 @@ export const App = () => {
         <section className="intro">
           <p>Drop a screenshot</p>
           <h1>Pick a device, tune the studio, export a clean mockup.</h1>
+          <div className="development-note">
+            Screenforge is still in development and may not work as expected on every browser or device model.
+          </div>
         </section>
 
         <section className="tool-grid">
