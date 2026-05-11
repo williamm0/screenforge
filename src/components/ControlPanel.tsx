@@ -22,6 +22,7 @@ export type AppSettings = {
   imageScale: number;
   imageOffsetX: number;
   imageOffsetY: number;
+  imageRotation: number;
   modelX: number;
   modelY: number;
   modelZ: number;
@@ -192,10 +193,11 @@ export const ControlPanel = ({
       <Range label="Image size" min={0.5} max={2.5} step={0.05} value={settings.imageScale} onChange={(value) => onSettingsChange(updateSetting(settings, 'imageScale', value))} />
       <Range label="Move X" min={-0.8} max={0.8} step={0.01} value={settings.imageOffsetX} onChange={(value) => onSettingsChange(updateSetting(settings, 'imageOffsetX', value))} />
       <Range label="Move Y" min={-0.8} max={0.8} step={0.01} value={settings.imageOffsetY} onChange={(value) => onSettingsChange(updateSetting(settings, 'imageOffsetY', value))} />
+      <Range label="Rotate" min={-3.14} max={3.14} step={0.02} value={settings.imageRotation} onChange={(value) => onSettingsChange(updateSetting(settings, 'imageRotation', value))} />
       <button
         className="wide-utility-button"
         type="button"
-        onClick={() => onSettingsChange({ ...settings, imageScale: 1, imageOffsetX: 0, imageOffsetY: 0 })}
+        onClick={() => onSettingsChange({ ...settings, imageScale: 1, imageOffsetX: 0, imageOffsetY: 0, imageRotation: 0 })}
       >
         Reset crop
       </button>

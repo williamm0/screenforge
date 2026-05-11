@@ -23,7 +23,7 @@ describe('computeImageFitRect', () => {
   it('scales and offsets the crop rectangle from the screen center', () => {
     const rect = computeImageFitRect(1000, 1000, 1000, 1000, 'cover');
 
-    expect(applyImageTransform(rect, 1000, 1000, { scale: 1.5, offsetX: 0.1, offsetY: -0.2 })).toEqual({
+    expect(applyImageTransform(rect, 1000, 1000, { scale: 1.5, offsetX: 0.1, offsetY: -0.2, rotation: 0 })).toEqual({
       x: -150,
       y: -450,
       width: 1500,

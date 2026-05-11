@@ -5,7 +5,7 @@ export const createScreenTexture = (
   imageUrl: string,
   targetRatio = 1,
   fit: ImageFitMode = 'cover',
-  transform: ImageTransform = { scale: 1, offsetX: 0, offsetY: 0 },
+  transform: ImageTransform = { scale: 1, offsetX: 0, offsetY: 0, rotation: 0 },
 ) =>
   new Promise<THREE.CanvasTexture>((resolve, reject) => {
     const image = new Image();
@@ -32,7 +32,11 @@ export const createScreenTexture = (
 
       context.fillStyle = '#050505';
       context.fillRect(0, 0, width, height);
-      context.drawImage(image, rect.x, rect.y, rect.width, rect.height);
+      context.save();
+      context.translate(width / 2, height / 2);
+      context.rotate(transform.rotation);
+      context.drawImage(image, rect.x - width / 2, rect.y - height / 2, rect.width, rect.height);
+      context.restore();
 
       const texture = new THREE.CanvasTexture(canvas);
       texture.colorSpace = THREE.SRGBColorSpace;

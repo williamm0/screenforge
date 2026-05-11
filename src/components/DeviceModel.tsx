@@ -16,6 +16,7 @@ type DeviceModelProps = {
   imageScale: number;
   imageOffsetX: number;
   imageOffsetY: number;
+  imageRotation: number;
   modelX: number;
   modelY: number;
   modelZ: number;
@@ -76,6 +77,7 @@ const LoadedModel = ({
   imageScale,
   imageOffsetX,
   imageOffsetY,
+  imageRotation,
   modelX,
   modelY,
   modelZ,
@@ -100,6 +102,7 @@ const LoadedModel = ({
       scale: imageScale,
       offsetX: imageOffsetX,
       offsetY: imageOffsetY,
+      rotation: imageRotation,
     })
       .then((nextTexture) => {
         if (active) {
@@ -117,7 +120,7 @@ const LoadedModel = ({
     return () => {
       active = false;
     };
-  }, [fallbackScreenRatio, imageFit, imageOffsetX, imageOffsetY, imageScale, imageUrl]);
+  }, [fallbackScreenRatio, imageFit, imageOffsetX, imageOffsetY, imageRotation, imageScale, imageUrl]);
 
   const { model, hasScreenMesh, fitScale } = useMemo(() => {
     const clone = source.clone(true);
@@ -148,6 +151,18 @@ const LoadedModel = ({
     const [width, height] = device.fallbackScreen.size;
     return createRoundedScreenGeometry(width, height, device.fallbackScreen.radius);
   }, [device.fallbackScreen]);
+
+  const islandGeometry = useMemo(() => {
+    const [width, height] = device.fallbackScreen.size;
+    return createRoundedScreenGeometry(width * 0.28, height * 0.045, height * 0.022);
+  }, [device.fallbackScreen.size]);
+
+  const isPhone = device.id.includes('iphone');
+  const islandPosition: [number, number, number] = [
+    device.fallbackScreen.position[0],
+    device.fallbackScreen.position[1] + device.fallbackScreen.size[1] * 0.405,
+    device.fallbackScreen.position[2] + 0.004,
+  ];
 
   useFrame((_, delta) => {
     if (autoRotate) {
@@ -185,6 +200,16 @@ const LoadedModel = ({
                 transparent
                 opacity={hasScreenMesh ? 0.98 : 1}
               />
+            </mesh>
+          ) : null}
+          {isPhone && texture ? (
+            <mesh
+              geometry={islandGeometry}
+              position={islandPosition}
+              rotation={device.fallbackScreen.rotation}
+              renderOrder={8}
+            >
+              <meshBasicMaterial color="#050505" toneMapped={false} side={THREE.DoubleSide} />
             </mesh>
           ) : null}
         </group>

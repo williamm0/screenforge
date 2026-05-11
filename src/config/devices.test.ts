@@ -20,10 +20,12 @@ describe('device configuration', () => {
   });
 
   it('recognizes common screen mesh and material names', () => {
-    const names = ['screen', 'Display', 'glass_panel', 'MonitorSurface', 'lcd_material'];
+    const names = ['screen', 'Display', 'MonitorSurface', 'lcd_material'];
 
     for (const name of names) {
       expect(SCREEN_MESH_NAME_PATTERN.test(name)).toBe(true);
     }
+
+    expect(SCREEN_MESH_NAME_PATTERN.test('glass_panel')).toBe(false);
   });
 });

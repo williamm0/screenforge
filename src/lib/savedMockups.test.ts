@@ -25,6 +25,7 @@ describe('createSavedMockup', () => {
           imageScale: 1,
           imageOffsetX: 0,
           imageOffsetY: 0,
+          imageRotation: 0,
           modelX: 0,
           modelY: 0,
           modelZ: 0,

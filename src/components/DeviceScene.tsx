@@ -26,6 +26,7 @@ type SceneSettings = {
   imageScale: number;
   imageOffsetX: number;
   imageOffsetY: number;
+  imageRotation: number;
   modelX: number;
   modelY: number;
   modelZ: number;
@@ -163,6 +164,7 @@ export const DeviceScene = ({ device, imageUrl, settings, resetToken, onCanvasRe
         imageScale={settings.imageScale}
         imageOffsetX={settings.imageOffsetX}
         imageOffsetY={settings.imageOffsetY}
+        imageRotation={settings.imageRotation}
         modelX={settings.modelX}
         modelY={settings.modelY}
         modelZ={settings.modelZ}

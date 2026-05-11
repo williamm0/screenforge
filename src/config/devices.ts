@@ -23,7 +23,7 @@ export type DeviceConfig = {
   cameraDistance: number;
 };
 
-export const SCREEN_MESH_NAME_PATTERN = /(screen|display|glass|monitor|lcd)/i;
+export const SCREEN_MESH_NAME_PATTERN = /(screen|display|monitor|lcd)/i;
 
 export const DEVICE_CONFIGS: DeviceConfig[] = [
   {

@@ -11,6 +11,7 @@ export type ImageTransform = {
   scale: number;
   offsetX: number;
   offsetY: number;
+  rotation: number;
 };
 
 export const computeImageFitRect = (
