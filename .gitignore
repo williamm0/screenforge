@@ -1,0 +1,11 @@
+node_modules
+dist
+.DS_Store
+3D Models
+*.local
+.env
+.env.*
+playwright-report
+test-results
+*.tsbuildinfo
+screenforge-smoke.png
