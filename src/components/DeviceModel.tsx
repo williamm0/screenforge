@@ -4,6 +4,7 @@ import { useFrame, useLoader } from '@react-three/fiber';
 import * as THREE from 'three';
 import { USDZLoader } from 'three/examples/jsm/loaders/USDZLoader.js';
 import { DeviceConfig, SCREEN_MESH_NAME_PATTERN } from '../config/devices';
+import { publicAssetUrl } from '../lib/assets';
 import { ImageFitMode } from '../lib/imageFit';
 import { createScreenTexture } from '../lib/screenTexture';
 
@@ -148,13 +149,13 @@ const LoadedModel = ({ device, imageUrl, source, autoRotate, imageFit, screenBri
 };
 
 const GlbDevice = (props: DeviceModelProps) => {
-  const gltf = useGLTF(props.device.modelPath) as unknown as { scene: THREE.Object3D };
+  const gltf = useGLTF(publicAssetUrl(props.device.modelPath)) as unknown as { scene: THREE.Object3D };
 
   return <LoadedModel {...props} source={gltf.scene} />;
 };
 
 const UsdzDevice = (props: DeviceModelProps) => {
-  const group = useLoader(USDZLoader, props.device.modelPath);
+  const group = useLoader(USDZLoader, publicAssetUrl(props.device.modelPath));
 
   return <LoadedModel {...props} source={group} />;
 };

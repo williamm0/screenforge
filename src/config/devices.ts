@@ -32,7 +32,7 @@ export const DEVICE_CONFIGS: DeviceConfig[] = [
   {
     id: 'iphone-15-pro',
     displayName: 'iPhone 15 Pro',
-    modelPath: '/models/iphone-15-pro.glb',
+    modelPath: 'models/iphone-15-pro.glb',
     initialRotation: [0.12, -0.28, 0],
     scale: 1,
     cameraDistance: 4.8,
@@ -41,7 +41,7 @@ export const DEVICE_CONFIGS: DeviceConfig[] = [
   {
     id: 'iphone-16-plus-blue',
     displayName: 'iPhone 16 Plus Blue',
-    modelPath: '/models/iphone-16-plus-blue.usdz',
+    modelPath: 'models/iphone-16-plus-blue.usdz',
     initialRotation: [0.1, -0.26, 0],
     scale: 1,
     cameraDistance: 4.8,
@@ -50,7 +50,7 @@ export const DEVICE_CONFIGS: DeviceConfig[] = [
   {
     id: 'iphone-16-pro-max',
     displayName: 'iPhone 16 Pro Max',
-    modelPath: '/models/iphone-16-pro-max.glb',
+    modelPath: 'models/iphone-16-pro-max.glb',
     initialRotation: [0.08, -0.24, 0],
     scale: 1,
     cameraDistance: 4.9,
@@ -59,7 +59,7 @@ export const DEVICE_CONFIGS: DeviceConfig[] = [
   {
     id: 'iphone-16-pro-max-light-brown',
     displayName: 'iPhone 16 Pro Max Light Brown',
-    modelPath: '/models/iphone-16-pro-max-light-brown.usdz',
+    modelPath: 'models/iphone-16-pro-max-light-brown.usdz',
     initialRotation: [0.08, -0.24, 0],
     scale: 1,
     cameraDistance: 4.9,
@@ -68,7 +68,7 @@ export const DEVICE_CONFIGS: DeviceConfig[] = [
   {
     id: 'iphone-17-pro',
     displayName: 'iPhone 17 Pro',
-    modelPath: '/models/iphone-17-pro.glb',
+    modelPath: 'models/iphone-17-pro.glb',
     initialRotation: [0.1, -0.3, 0],
     scale: 1,
     cameraDistance: 4.8,
@@ -77,7 +77,7 @@ export const DEVICE_CONFIGS: DeviceConfig[] = [
   {
     id: 'iphone-air',
     displayName: 'iPhone Air',
-    modelPath: '/models/iphone-air.usdz',
+    modelPath: 'models/iphone-air.usdz',
     initialRotation: [0.1, -0.25, 0],
     scale: 1,
     cameraDistance: 4.7,
@@ -86,7 +86,7 @@ export const DEVICE_CONFIGS: DeviceConfig[] = [
   {
     id: 'macbook-neo',
     displayName: 'MacBook Neo',
-    modelPath: '/models/macbook-neo.glb',
+    modelPath: 'models/macbook-neo.glb',
     initialRotation: [0.18, -0.45, 0],
     scale: 1,
     cameraDistance: 6,
@@ -95,7 +95,7 @@ export const DEVICE_CONFIGS: DeviceConfig[] = [
   {
     id: 'macbook-pro-14-inch-m5',
     displayName: 'MacBook Pro 14-inch M5',
-    modelPath: '/models/macbook-pro-14-inch-m5.glb',
+    modelPath: 'models/macbook-pro-14-inch-m5.glb',
     initialRotation: [0.18, -0.43, 0],
     scale: 1,
     cameraDistance: 6.2,
@@ -104,7 +104,7 @@ export const DEVICE_CONFIGS: DeviceConfig[] = [
   {
     id: 'silver-apple-ipad-13-pro-m4',
     displayName: 'Silver iPad Pro 13-inch M4',
-    modelPath: '/models/silver-apple-ipad-13-pro-m4.glb',
+    modelPath: 'models/silver-apple-ipad-13-pro-m4.glb',
     initialRotation: [0.08, -0.22, 0],
     scale: 1,
     cameraDistance: 5,

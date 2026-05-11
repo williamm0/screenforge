@@ -6,7 +6,7 @@ describe('device configuration', () => {
     expect(DEVICE_CONFIGS).toHaveLength(9);
 
     for (const device of DEVICE_CONFIGS) {
-      expect(device.modelPath).toMatch(/^\/models\/.+\.(glb|usdz)$/);
+      expect(device.modelPath).toMatch(/^models\/.+\.(glb|usdz)$/);
       expect(device.displayName).toBeTruthy();
       expect(device.fallbackScreen.size[0]).toBeGreaterThan(0);
       expect(device.fallbackScreen.size[1]).toBeGreaterThan(0);
